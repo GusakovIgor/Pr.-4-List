@@ -1,0 +1,11 @@
+run: List.exe
+	List.exe
+
+List.exe: List_main.o List.h Logs.o
+	g++ -w List_main.o List.h Logs.o -o List.exe
+
+List_main.o: List_main.cpp
+	g++ -c List_main.cpp
+
+Logs.o: Logs.cpp
+	g++ -c Logs.cpp
