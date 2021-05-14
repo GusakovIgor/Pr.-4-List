@@ -1,5 +1,15 @@
 #include "List.h"
 
+const char* TextLogs = "Logs/TextLogs.txt";
+
+const char* GraphicLogsBase  = "Logs/GL.txt";
+
+const char* LogicalLogsName  = "Logs/Logical_GL";
+
+const char* PhysicalLogsName = "Logs/Physical_GL";
+
+
+
 void LogsCleaner ()
 {
     FILE* logs = fopen ("logs.txt", "w");
@@ -62,7 +72,7 @@ void ListDump (List* lst, char* func, error_t err)
         fprintf (logs, "\n\nList:\n");
         fprintf (logs, "head = %d\n", lst->head);
         fprintf (logs, "tail = %d\n", lst->tail);
-        fprintf (logs, "size = %d\n", lst->size);
+        fprintf (logs, "size = %ld\n", lst->size);
         fprintf (logs, "free = %d\n\n", lst->free);
         
         fprintf (logs, "i:   data:   next:   prev:\n");
@@ -88,7 +98,9 @@ void ListDump (List* lst, char* func, error_t err)
 
 void LogicalLogsMaker (List* lst)
 {
-    FILE* GraphicLogs = fopen ("GraphicLogs_L.txt", "w");
+    static int call = 1;
+
+    FILE* GraphicLogs = fopen (GraphicLogsBase, "w");
     
     fprintf (GraphicLogs, "digraph G {\n");
     fprintf (GraphicLogs, "node [shape = \"record\", style = \"filled\", color = \"#000800\", fillcolor = \" #ED96EC\"]\n");
@@ -119,14 +131,17 @@ void LogicalLogsMaker (List* lst)
     
     fclose (GraphicLogs);
     
-    system ("dot -Tjpeg GraphicLogs_L.txt > GraphicLogs_L.jpeg");
-    system ("start GraphicLogs_L.jpeg");
+    MakeOpenPhoto (call, LOGICAL);
+
+    call++;
 }
 
 
 void PhysicalLogsMaker (List* lst)
 {   
-    FILE* GraphicLogs = fopen ("GraphicLogs_P.txt", "w");
+    static int call = 1;
+
+    FILE* GraphicLogs = fopen (GraphicLogsBase, "w");
     
     fprintf (GraphicLogs, "digraph G {\n");
     MakePlaces (lst, GraphicLogs);
@@ -147,8 +162,9 @@ void PhysicalLogsMaker (List* lst)
     
     fclose (GraphicLogs);
     
-    system ("dot -Tjpeg GraphicLogs_P.txt > GraphicLogs_P.jpeg");
-    system ("start GraphicLogs_P.jpeg");
+    MakeOpenPhoto (call, PHYSICAL);
+
+    call++;
 }
 
 
@@ -187,8 +203,24 @@ void MakePlaces (List* lst, FILE* GraphicLogs)
     {
         fprintf (GraphicLogs, "\"%d\" -> ", i);
     }
-    fprintf (GraphicLogs, "\"%d\";\n", lst->capacity - 1);
+    fprintf (GraphicLogs, "\"%ld\";\n", lst->capacity - 1);
     fprintf (GraphicLogs, "}\n");
 }
 
 
+void MakeOpenPhoto (int call, int type)
+{
+    char* command_1 = (char*) calloc (MAX_COMMAND_LEN, sizeof(char));
+    char* command_2 = (char*) calloc (MAX_COMMAND_LEN, sizeof(char));
+    
+    const char* LogsName = (type == LOGICAL) ? LogicalLogsName : PhysicalLogsName;
+
+    sprintf (command_1, "dot -Tpng %s > %s_%d.png", GraphicLogsBase, LogsName, call);
+    sprintf (command_2, "xdg-open %s_%d.png", LogsName, call);
+    
+    system (command_1);
+    system (command_2);
+    
+    free (command_1);
+    free (command_2);
+}

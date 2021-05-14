@@ -1,11 +1,11 @@
-run: List.exe
-	List.exe
+Run: List
+	bin/List.out
 
-List.exe: List_main.o List.h Logs.o
-	g++ -w List_main.o List.h Logs.o -o List.exe
+List: Main Logs
+	g++ -o bin/List.out bin/List_main.o bin/Logs.o
 
-List_main.o: List_main.cpp
-	g++ -c List_main.cpp
+Main: List_main.cpp List.h
+	g++ -c -o bin/List_main.o List_main.cpp
 
-Logs.o: Logs.cpp
-	g++ -c Logs.cpp
+Logs: Logs.cpp List.h
+	g++ -c -o bin/Logs.o Logs.cpp

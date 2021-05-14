@@ -1,30 +1,28 @@
 #include "List.h"
 
 
-
-
 int main ()
 {
-    LogsCleaner ();
-    
     size_t capacity = 0;
-    scanf ("%d", &capacity);
+    scanf ("%ld", &capacity);
     List* lst = ListConstruct (capacity);
     
+    printf ("\nOK\n");
+
     for (int val = 10; val < 30; val += 10)
     {
         InsertHead(lst, val);
     }
     
-    //elem_t check = ExtractHead(lst);
-    //printf ("\nCheck = %lg\n\n", check);
+    elem_t check = ExtractHead(lst);
+    printf ("\nCheck = %lg\n\n", check);
     
     //
     printf ("List:\n");
-    printf ("head = %d\n", lst->head);
-    printf ("tail = %d\n", lst->tail);
-    printf ("size = %d\n", lst->size);
-    printf ("free = %d\n", lst->free);
+    printf ("head = %d\n",  lst->head);
+    printf ("tail = %d\n",  lst->tail);
+    printf ("size = %ld\n", lst->size);
+    printf ("free = %d\n",  lst->free);
     
     printf ("i:   data:   next:   prev:\n");
     for (int i = 0; i < lst->capacity; i++)
@@ -37,7 +35,7 @@ int main ()
     }
     //
     
-    InsertRandomAfter (lst, GetIndex(lst, 2), 90);
+    InsertRandomAfter (lst, GetIndex(lst, 1), 90);
     
     LogicalLogsMaker  (lst);
     PhysicalLogsMaker (lst);
@@ -48,7 +46,7 @@ int main ()
 }
 
 
-// LIST FUNCTIONS-----------------------------------------------------------------------------
+
 List* ListConstruct (size_t capacity)
 {
     
@@ -113,24 +111,6 @@ void InsertHead (List* lst, elem_t value)
 {
     ListDump (lst, "InsertHead", 0);
     
-    /*
-    int second_head = 0;
-    if (lst->size)
-        second_head = lst->head;
-    lst->head = lst->free;
-    lst->free = lst->nodes[lst->free].next;
-    
-    lst->nodes[lst->free].prev = 0;
-    
-    assert (lst->nodes[lst->head].prev == 0);
-    lst->nodes[lst->head].data = value;
-    lst->nodes[lst->head].next = second_head;
-    
-    if (lst->size)
-        lst->nodes[second_head].prev  = lst->head;
-    lst->size++;
-    */
-    
     InsertRandomAfter (lst, 0, value);
     
     ListDump (lst, "InsertHead", 0);
@@ -194,7 +174,6 @@ void InsertRandomAfter (List* lst, int index, elem_t value)
         lst->nodes[lst->nodes[old_free].next].prev = old_free; 
     
     lst->size++;
-    
 }
 
 int GetIndex (List* lst, int logical_index)
@@ -219,9 +198,3 @@ int GetIndex (List* lst, int logical_index)
     
     return iter;
 }
-// END OF LIST FUNCTIONS----------------------------------------------------------------------
-
-
-
-
-

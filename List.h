@@ -8,8 +8,20 @@ typedef int    error_t;
 
 const size_t MIN_CAPACITY = 20;
 
+const size_t MAX_COMMAND_LEN = 100;
 
-enum errors {MEMORY_ERROR = 1, CAPACITY_ERROR = 2, NULL_POINTER_ACCESS = 3};
+
+enum logs_types {
+					LOGICAL = 1,
+					PHYSICAL = 2
+				};
+
+enum errors {
+				MEMORY_ERROR = 1, 
+				CAPACITY_ERROR = 2, 
+				NULL_POINTER_ACCESS = 3
+			};
+
 
 struct Node
 {
@@ -30,7 +42,8 @@ struct List
     Node* nodes;
 };
 
-// List functions
+
+/*** List functions ***/
 List*   ListConstruct   (size_t capacity);
 List*   ListDestruct    (List* lst);
 error_t ListStartFiller (List* lst);
@@ -45,7 +58,7 @@ elem_t ExtractRandom        (List* lst, int index);
 //-----------------------------------------
 
 
-// Protection functions
+/*** Protection & Logs functions ***/
 error_t Verify (List* lst);
 void    LogsCleaner ();
 void    ListDump          (List* lst, char* func, error_t err);
@@ -54,9 +67,5 @@ void    PhysicalLogsMaker (List* lst);
 
 void    MakePlaces        (List* lst, FILE* GraphicLogs);
 void    PrintBranch       (List* lst, FILE* GraphicLogs, int start_index);
+void 	MakeOpenPhoto 	  (int call, int type);
 //-----------------------------------------------------
-
-
-
-
-
