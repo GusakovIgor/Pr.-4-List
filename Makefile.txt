@@ -2,10 +2,10 @@ Run: List
 	bin/List.out
 
 List: Main Logs
-	g++ -o bin/List.out bin/List_main.o bin/Logs.o
+	g++ -o bin/List.out bin/List.o bin/Logs.o
 
-Main: List_main.cpp List.h
-	g++ -c -o bin/List_main.o List_main.cpp
+Main: List.cpp List.h
+	g++ -c -o bin/List.o List.cpp
 
 Logs: Logs.cpp List.h
 	g++ -c -o bin/Logs.o Logs.cpp
