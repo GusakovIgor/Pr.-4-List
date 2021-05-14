@@ -81,7 +81,6 @@ List* ListConstruct (size_t capacity)
     return lst;
 }
 
-
 List* ListDestruct (List* lst)
 {
     free (lst->nodes);
@@ -89,7 +88,6 @@ List* ListDestruct (List* lst)
     
     return NULL;
 }
-
 
 error_t ListStartFiller (List* lst)
 {
@@ -116,6 +114,33 @@ void InsertHead (List* lst, elem_t value)
     ListDump (lst, "InsertHead", 0);
 }
 
+void InsertRandomAfter (List* lst, int index, elem_t value)
+{
+    int old_free = lst->free;
+    lst->free = lst->nodes[old_free].next;
+    lst->nodes[lst->free].prev = 0;
+    
+    lst->nodes[old_free].prev = index;
+    lst->nodes[old_free].data = value;
+    
+    if (index == 0)
+    {
+        lst->nodes[old_free].next = lst->head;
+        lst->head = old_free;
+    }
+    else
+    {
+        lst->nodes[old_free].next = lst->nodes[index].next;
+    }
+    
+    if (index != 0)
+        lst->nodes [lst->nodes[old_free].prev].next  = old_free;
+    
+    if (lst->nodes[old_free].next != 0)
+        lst->nodes[lst->nodes[old_free].next].prev = old_free; 
+    
+    lst->size++;
+}
 
 elem_t ExtractHead (List* lst)
 {
@@ -147,34 +172,6 @@ elem_t ExtractHead (List* lst)
     return value;
 }
 
-
-void InsertRandomAfter (List* lst, int index, elem_t value)
-{
-    int old_free = lst->free;
-    lst->free = lst->nodes[old_free].next;
-    lst->nodes[lst->free].prev = 0;
-    
-    lst->nodes[old_free].prev = index;
-    lst->nodes[old_free].data = value;
-    
-    if (index == 0)
-    {
-        lst->nodes[old_free].next = lst->head;
-        lst->head = old_free;
-    }
-    else
-    {
-        lst->nodes[old_free].next = lst->nodes[index].next;
-    }
-    
-    if (index != 0)
-        lst->nodes [lst->nodes[old_free].prev].next  = old_free;
-    
-    if (lst->nodes[old_free].next != 0)
-        lst->nodes[lst->nodes[old_free].next].prev = old_free; 
-    
-    lst->size++;
-}
 
 int GetIndex (List* lst, int logical_index)
 {
