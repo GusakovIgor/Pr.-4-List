@@ -12,7 +12,7 @@ const char* PhysicalLogsName = "Logs/Physical_GL";
 
 void LogsCleaner ()
 {
-    FILE* logs = fopen ("logs.txt", "w");
+    FILE* logs = fopen (TextLogs, "w");
     fclose (logs);
 }
 
